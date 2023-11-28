@@ -1,14 +1,32 @@
+import getRandomData from "./form.test-data.js";
+import * as view from "./form.view.js";
+import * as model from "./../model.js";
 
-import View from './form.view.js';
-import Model from './../model.js';
-import { testData } from './form.test-data.js';
+// запуск 
+function init() {
+	renderTestData();
+	setupEventListeners();
+}
 
-const view = new View();
-const model = new Model();
+// обработчики событий
+function setupEventListeners() {
+	view.elements.form.addEventListener('submit', formSubmitHandler);
+}
 
-view.getRandomData();
+// рендер тестовых данных на страницу
+function renderTestData() {
+	view.insertTestData(getRandomData());
+}
 
-view.elements.form.addEventListener('submit', function (e) {
+// обработка событий формы
+function formSubmitHandler(e) {
 	e.preventDefault();
-	model.addRequest(view.getRandomData());
-})
+	const formData = view.getFormInput();
+	model.addRequest(formData);
+	view.clearForm();
+	renderTestData();
+}
+
+
+
+init();
